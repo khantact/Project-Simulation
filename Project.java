@@ -5,6 +5,10 @@ public class Project {
     private int sqft = 0;
     private int days = 0;
     private int workers = 0;
+    private int woodstash = 0;
+    private int stonestash = 0;
+    private int daycount = 0;
+    private int remainingsqft = 0;
     private Worker[] Workerlist;
 
     public Project(String name, int sqft, int days, int workers) {
@@ -22,6 +26,7 @@ public class Project {
         this.days = days;
         this.workers = workers;
         Workerlist = new Worker[workers];
+        remainingsqft = sqft;
     }
 
     public boolean assignWorker(Worker w) {
@@ -53,7 +58,19 @@ public class Project {
     }
 
     public boolean simulateConstruction() {
+        System.out.println("Beginning " + this.name + " simulation...");
+        for (int i = 1; i < days + 1; i++) {
+            System.out.println("*** Day " + i + " ***");
+            System.out.println("--- Starting Totals --- Stash: " + woodstash + " logs and " + stonestash + " stone, "
+                    + remainingsqft + "sq feet left to build!");
+            for (int w = 0; w < workers; w++) {
+                if (Workerlist[w] == null) {
+                    continue;
+                }
+                System.out.println(this.Workerlist[w]);
 
+            }
+        }
         return true;
     }
 
@@ -61,18 +78,15 @@ public class Project {
         return this.name;
     }
 
-    public String toString() {
-        return "Workers: " + Arrays.toString(Workerlist);
-    }
-
     public static void main(String[] args) {
         Worker khan = new StoneWorker("Kevin Han", 100);
-        Worker jax = new StoneWorker("Kevin Han", 100);
-        Project ex = new Project("test", 10000, 5, 5);
-        ex.assignWorker(khan);
-        ex.assignWorker(khan);
-        ex.unassignWorker(jax);
+        Worker jax = new WoodWorker("Jax Everfrost", 100);
+        Project ex = new Project("test", 1000, 1, 5);
 
-        System.out.println(Arrays.toString(ex.Workerlist));
+        ex.assignWorker(khan);
+        ex.assignWorker(jax);
+
+        ex.simulateConstruction();
+        // System.out.println((ex.Workerlist[0]));
     }
 }
