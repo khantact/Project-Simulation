@@ -12,7 +12,6 @@ public class Project {
     private int remainingsqft = 0;
     private int woodharvest = 0;
     private int stoneharvest = 0;
-    private int sqftharvest = 0;
     private Worker[] Workerlist;
 
     public Project(String name, int sqft, int days, int workers) {
@@ -68,7 +67,7 @@ public class Project {
             System.out.println("--- Starting Totals --- Stash: " + woodstash + " logs and " + stonestash + " stone, "
                     + remainingsqft + "sq feet left to build!\n");
             for (int w = 0; w < workers; w++) {
-                if (Workerlist[w] == null) {
+                if (Workerlist[w] == null) { // skips any unassigned workers
                     continue;
                 }
                 System.out.println(this.Workerlist[w]);
@@ -76,11 +75,11 @@ public class Project {
                 if (Workerlist[w] instanceof StoneWorker) {
                     System.out.println("...mined " + Workerlist[w].work() + " stones!\n");
                     stonestashfuture += Workerlist[w].work();
-                    stoneharvest = Workerlist[w].work();
+                    stoneharvest += Workerlist[w].work();
                 } else if (Workerlist[w] instanceof WoodWorker) {
                     System.out.println("...logged " + Workerlist[w].work() + " logs!\n");
                     woodstashfuture += Workerlist[w].work();
-                    woodharvest = Workerlist[w].work();
+                    woodharvest += Workerlist[w].work();
                 } else if (Workerlist[w] instanceof ConstructionWorker) {
                     if (i == 1) {
                         System.out.println("...built 0 square feet!\n");
@@ -99,9 +98,9 @@ public class Project {
                             System.out.println("...built " + Workerlist[w].work() + " square feet!\n");
                             sqftbuilt += Workerlist[w].work();
                             stonestashfuture -= Workerlist[w].work();
-                            ;
+
                             woodstashfuture -= Workerlist[w].work();
-                            ;
+
                             woodstash -= Workerlist[w].work();
                             stonestash -= Workerlist[w].work();
                         }
@@ -115,7 +114,7 @@ public class Project {
                             stonestash -= stonestash;
                         } else {
                             System.out.println("...built " + Workerlist[w].work() + " square feet!\n");
-                            sqftbuilt += stonestash;
+                            sqftbuilt += Workerlist[w].work();
                             stonestashfuture -= Workerlist[w].work();
                             woodstashfuture -= Workerlist[w].work();
                             stonestash -= Workerlist[w].work();
@@ -133,31 +132,39 @@ public class Project {
             sqftbuilt = 0;
             stonestash = stonestashfuture;
             woodstash = woodstashfuture;
+            woodharvest = 0;
+            stoneharvest = 0;
             if (remainingsqft < 0) {
                 System.out.println('"' + name + '"' + " completed successfully after " + i + " days!");
                 return true;
             }
         }
+        System.out.println('"' + name + '"' + " was not completed within the given deadline.");
         return false;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
     public static void main(String[] args) {
-        Worker khan = new StoneWorker("Kevin Han", 100);
-        Worker jax = new WoodWorker("Jax Everfrost", 100);
-        Worker jason = new ConstructionWorker("Jason Everfrost", 100, 150, 300);
-        Worker jaxon = new ConstructionWorker("Jaxon Everfrost", 200, 300, 400);
-        Project ex = new Project("test", 100, 3, 4);
+        // testing default constructor values
+        // Worker jax = new WoodWorker("Jax Everfrost", -1);
+        // Worker khan = new StoneWorker("Kevin Han", -1);
+        // Worker jason = new ConstructionWorker("Jason Everfrost", -1, -1, -1);
+        // ex.assignWorker(jax);
+        // ex.assignWorker(khan);
+        // ex.assignWorker(jason);
+
+        Worker jax = new WoodWorker("Jax Everfrost", 200);
+        Worker khan = new StoneWorker("Kevin Han", 300);
+        Worker jason = new ConstructionWorker("Jason Everfrost", 300, 350, 400);
+        Worker odin = new WoodWorker("Odin Everfrost", 150);
+        Worker jaxon = new ConstructionWorker("Jaxon Everfrost", 150, 175, 500);
+        Project ex = new Project("Gladsheim", 600, 6, 5);
 
         ex.assignWorker(jax);
         ex.assignWorker(khan);
         ex.assignWorker(jason);
+        ex.assignWorker(odin);
         ex.assignWorker(jaxon);
 
         ex.simulateConstruction();
-        // System.out.println((ex.Workerlist[0]));
     }
 }
