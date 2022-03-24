@@ -26,9 +26,9 @@ public class StoneWorker extends Worker {
         return "[ Stone Worker ] " + super.toString() + " (avg stone/day: " + average + ")";
     }
 
-    public static void main(String[] args) {
-        StoneWorker c1 = new StoneWorker("Kevin Han", 100);
-        System.out.println(c1);
-        System.out.println(c1.work());
-    }
+    // public static void main(String[] args) {
+    // StoneWorker c1 = new StoneWorker("Kevin Han", 100);
+    // System.out.println(c1);
+    // System.out.println(c1.work());
+    // }
 }
